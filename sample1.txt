@@ -77,3 +77,78 @@ MAIN
         SLEEP 1
     END WHILE
 END MAIN
+
+
+#######################
+
+
+DEFINE canvas ARRAY[24] OF CHAR(100)
+DEFINE jam, menit, detik INTEGER
+DEFINE sudut_jam, sudut_menit, sudut_detik FLOAT
+
+FUNCTION gambar_lingkaran()
+   DEFINE i, j INTEGER
+   
+   -- Bersihkan canvas
+   FOR i = 1 TO 24
+       LET canvas[i] = " " * 100
+   END FOR
+
+   -- Gambar lingkaran jam
+   FOR i = 5 TO 15
+       FOR j = 35 TO 65
+           IF (i-10)*(i-10) + (j-50)*(j-50) <= 100 THEN
+               LET canvas[i][j] = "."
+           END IF
+       END FOR
+   END FOR
+
+   -- Tambah penanda angka jam
+   LET canvas[6][48] = "12"
+   LET canvas[10][35] = "9"
+   LET canvas[10][65] = "3"
+   LET canvas[15][48] = "6"
+END FUNCTION
+
+FUNCTION gambar_jarum(x, y, panjang, sudut)
+   DEFINE x, y INTEGER
+   DEFINE panjang FLOAT
+   DEFINE sudut FLOAT
+   DEFINE i INTEGER
+   
+   FOR i = 1 TO ROUND(panjang)
+       LET canvas[y + ROUND(i * sin(sudut))][x + ROUND(i * cos(sudut))] = "*"
+   END FOR
+END FUNCTION
+
+MAIN
+   WHILE TRUE
+       -- Ambil waktu saat ini
+       LET jam = EXTEND(CURRENT YEAR TO HOUR)[12,13]
+       LET menit = EXTEND(CURRENT YEAR TO MINUTE)[15,16]
+       LET detik = EXTEND(CURRENT YEAR TO SECOND)[18,19]
+       
+       -- Hitung sudut untuk jarum
+       LET sudut_jam = (jam * 30 + menit * 0.5) * (3.14159 / 180)
+       LET sudut_menit = (menit * 6) * (3.14159 / 180)
+       LET sudut_detik = (detik * 6) * (3.14159 / 180)
+       
+       CALL gambar_lingkaran()
+       
+       -- Gambar jarum
+       CALL gambar_jarum(50, 10, 5, sudut_jam)     -- Jarum jam
+       CALL gambar_jarum(50, 10, 7, sudut_menit)   -- Jarum menit
+       CALL gambar_jarum(50, 10, 9, sudut_detik)   -- Jarum detik
+       
+       CLEAR SCREEN
+       DISPLAY canvas[1], canvas[2], canvas[3], canvas[4], canvas[5],
+               canvas[6], canvas[7], canvas[8], canvas[9], canvas[10],
+               canvas[11], canvas[12], canvas[13], canvas[14], canvas[15],
+               canvas[16], canvas[17], canvas[18], canvas[19], canvas[20],
+               canvas[21], canvas[22], canvas[23], canvas[24]
+       
+       DISPLAY jam, ":", menit, ":", detik AT 20,40
+       
+       SLEEP 1
+   END WHILE
+END MAIN

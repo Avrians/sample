@@ -77,3 +77,144 @@ MAIN
         SLEEP 0.2
     END WHILE
 END MAIN
+
+
+
+#########################
+
+
+DEFINE canvas ARRAY[24] OF CHAR(100)
+DEFINE bola_x, bola_y INTEGER
+DEFINE arah_x, arah_y INTEGER
+
+FUNCTION acak_arah()
+    -- Menghasilkan arah gerak acak antara -3 sampai 3
+    LET arah_x = (RAND(7) - 3)
+    LET arah_y = (RAND(7) - 3)
+    
+    -- Pastikan tidak ada arah nol
+    IF arah_x = 0 THEN LET arah_x = 1 END IF
+    IF arah_y = 0 THEN LET arah_y = 1 END IF
+END FUNCTION
+
+FUNCTION inisialisasi_canvas()
+    DEFINE i INTEGER
+    
+    FOR i = 1 TO 24
+        LET canvas[i] = CHOOSE 
+                        WHEN i = 1 OR i = 24 THEN "*" * 100
+                        ELSE "*" || " " * 98 || "*"
+                        END
+    END FOR
+END FUNCTION
+
+FUNCTION gambar_bola()
+    LET canvas[bola_y][bola_x+1] = "O"
+END FUNCTION
+
+FUNCTION pindahkan_bola()
+    -- Pantul jika menyentuh dinding
+    IF bola_x + arah_x < 1 OR bola_x + arah_x > 98 THEN
+        CALL acak_arah()
+        LET arah_x = -arah_x
+    END IF
+    
+    IF bola_y + arah_y < 2 OR bola_y + arah_y > 23 THEN
+        CALL acak_arah()
+        LET arah_y = -arah_y
+    END IF
+    
+    LET bola_x = bola_x + arah_x
+    LET bola_y = bola_y + arah_y
+END FUNCTION
+
+MAIN
+    -- Posisi awal bola
+    LET bola_x = 50
+    LET bola_y = 12
+    
+    -- Arah awal acak
+    CALL acak_arah()
+    
+    WHILE TRUE
+        CALL inisialisasi_canvas()
+        CALL pindahkan_bola()
+        CALL gambar_bola()
+        
+        CLEAR SCREEN
+        DISPLAY canvas[1], canvas[2], canvas[3], canvas[4], canvas[5], 
+                canvas[6], canvas[7], canvas[8], canvas[9], canvas[10],
+                canvas[11], canvas[12], canvas[13], canvas[14], canvas[15],
+                canvas[16], canvas[17], canvas[18], canvas[19], canvas[20], 
+                canvas[21], canvas[22], canvas[23], canvas[24]
+        
+        SLEEP 0.2
+    END WHILE
+END MAIN
+
+
+
+############################
+
+DEFINE canvas ARRAY[24] OF CHAR(100)
+DEFINE bola_x, bola_y FLOAT
+DEFINE kecepatan_x, kecepatan_y FLOAT
+DEFINE gravitasi FLOAT
+
+FUNCTION inisialisasi_canvas()
+   DEFINE i INTEGER
+   FOR i = 1 TO 24
+       LET canvas[i] = CHOOSE 
+                       WHEN i = 1 OR i = 24 THEN "*" * 100
+                       ELSE "*" || " " * 98 || "*"
+                       END
+   END FOR
+END FUNCTION
+
+FUNCTION gambar_bola()
+   LET canvas[ROUND(bola_y)][ROUND(bola_x)+1] = "O"
+END FUNCTION
+
+FUNCTION pindahkan_bola()
+   -- Hitung kecepatan dengan gravitasi
+   LET kecepatan_y = kecepatan_y + gravitasi
+   
+   -- Perbarui posisi
+   LET bola_x = bola_x + kecepatan_x
+   LET bola_y = bola_y + kecepatan_y
+   
+   -- Pantul dari dinding horizontal
+   IF bola_x <= 1 OR bola_x >= 98 THEN
+       LET kecepatan_x = -kecepatan_x * 0.8
+   END IF
+   
+   -- Pantul dari lantai dengan kehilangan energi
+   IF bola_y >= 23 THEN
+       LET bola_y = 23
+       LET kecepatan_y = -kecepatan_y * 0.7
+   END IF
+END FUNCTION
+
+MAIN
+   -- Inisialisasi posisi dan kecepatan
+   LET bola_x = 50
+   LET bola_y = 2
+   LET kecepatan_x = 2   -- Awal miring
+   LET kecepatan_y = 0
+   LET gravitasi = 0.5
+   
+   WHILE TRUE
+       CALL inisialisasi_canvas()
+       CALL pindahkan_bola()
+       CALL gambar_bola()
+       
+       CLEAR SCREEN
+       DISPLAY canvas[1], canvas[2], canvas[3], canvas[4], canvas[5], 
+               canvas[6], canvas[7], canvas[8], canvas[9], canvas[10],
+               canvas[11], canvas[12], canvas[13], canvas[14], canvas[15],
+               canvas[16], canvas[17], canvas[18], canvas[19], canvas[20], 
+               canvas[21], canvas[22], canvas[23], canvas[24]
+       
+       SLEEP 0.1
+   END WHILE
+END MAIN
