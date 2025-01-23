@@ -1,0 +1,79 @@
+DEFINE canvas ARRAY[24] OF CHAR(100)
+DEFINE bola_x, bola_y INTEGER
+DEFINE arah_x, arah_y INTEGER
+
+FUNCTION inisialisasi_canvas()
+    DEFINE i INTEGER
+    
+    -- Bersihkan canvas
+    FOR i = 1 TO 24
+        LET canvas[i] = " " * 100
+    END FOR
+    
+    -- Gambar batas canvas
+    FOR i = 1 TO 24
+        LET canvas[i] = canvas[i] CLIPPED || 
+                        CHOOSE 
+                            WHEN i = 1 OR i = 24 THEN "*" * 100
+                            ELSE "*" || " " * 98 || "*"
+                        END
+    END FOR
+END FUNCTION
+
+FUNCTION gambar_bola()
+    -- Hapus posisi lama
+    LET canvas[bola_y][bola_x+1] = " "
+    
+    -- Gambar bola di posisi baru
+    LET canvas[bola_y][bola_x+1] = "O"
+END FUNCTION
+
+FUNCTION pindahkan_bola()
+    -- Cek dan ubah arah jika menyentuh dinding
+    IF bola_x + arah_x < 1 OR bola_x + arah_x > 98 THEN
+        LET arah_x = -arah_x
+    END IF
+    
+    IF bola_y + arah_y < 2 OR bola_y + arah_y > 23 THEN
+        LET arah_y = -arah_y
+    END IF
+    
+    -- Pindahkan bola
+    LET bola_x = bola_x + arah_x
+    LET bola_y = bola_y + arah_y
+END FUNCTION
+
+FUNCTION tampilkan_canvas()
+    DEFINE i INTEGER
+    
+    CLEAR SCREEN
+    
+    FOR i = 1 TO 24
+        DISPLAY canvas[i]
+    END FOR
+END FUNCTION
+
+MAIN
+    -- Inisialisasi posisi awal bola
+    LET bola_x = 50
+    LET bola_y = 12
+    
+    -- Inisialisasi arah gerak bola
+    LET arah_x = 2
+    LET arah_y = 1
+    
+    WHILE TRUE
+        -- Bersihkan dan gambar ulang canvas
+        CALL inisialisasi_canvas()
+        
+        -- Pindahkan dan gambar bola
+        CALL pindahkan_bola()
+        CALL gambar_bola()
+        
+        -- Tampilkan canvas
+        CALL tampilkan_canvas()
+        
+        -- Jeda untuk animasi
+        SLEEP 0.2
+    END WHILE
+END MAIN

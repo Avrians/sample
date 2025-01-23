@@ -1,0 +1,79 @@
+DEFINE tm_now DATETIME YEAR TO SECOND
+DEFINE jam, menit, detik CHAR(2)
+DEFINE sudut_jam, sudut_menit, sudut_detik INTEGER
+DEFINE canvas ARRAY[24] OF CHAR(100)
+DEFINE i INTEGER
+
+FUNCTION gambar_lingkaran()
+    -- Inisialisasi canvas kosong
+    FOR i = 1 TO 24
+        LET canvas[i] = " " * 100
+    END FOR
+
+    -- Gambar lingkaran jam
+    LET canvas[5] = canvas[5] CLIPPED || "                  #########                  "
+    LET canvas[6] = canvas[6] CLIPPED || "              ###################            "
+    LET canvas[7] = canvas[7] CLIPPED || "            #######################          "
+    LET canvas[8] = canvas[8] CLIPPED || "           #########################         "
+    LET canvas[9] = canvas[9] CLIPPED || "          ###########################        "
+    LET canvas[10] = canvas[10] CLIPPED || "          ###########################        "
+    LET canvas[11] = canvas[11] CLIPPED || "           #########################         "
+    LET canvas[12] = canvas[12] CLIPPED || "            #######################          "
+    LET canvas[13] = canvas[13] CLIPPED || "              ###################            "
+    LET canvas[14] = canvas[14] CLIPPED || "                  #########                  "
+END FUNCTION
+
+FUNCTION gambar_jarum(sudut, karakter)
+    DEFINE sudut INTEGER
+    DEFINE karakter CHAR(1)
+    DEFINE x, y INTEGER
+
+    -- Perhitungan posisi jarum dalam lingkaran
+    LET x = 10 + ROUND(7 * sin(sudut * 3.14159 / 180))
+    LET y = 10 + ROUND(7 * cos(sudut * 3.14159 / 180))
+
+    LET canvas[y] = 
+        canvas[y][1,x] CLIPPED || 
+        karakter || 
+        canvas[y][x+2,100]
+END FUNCTION
+
+FUNCTION tampilkan_canvas()
+    FOR i = 1 TO 24
+        DISPLAY canvas[i]
+    END FOR
+END FUNCTION
+
+MAIN
+    WHILE TRUE
+        LET tm_now = CURRENT YEAR TO SECOND
+        
+        -- Ambil komponen waktu
+        LET jam = EXTEND(tm_now, YEAR TO HOUR)[12,13]
+        LET menit = EXTEND(tm_now, YEAR TO MINUTE)[15,16]
+        LET detik = EXTEND(tm_now, YEAR TO SECOND)[18,19]
+        
+        -- Hitung sudut untuk jarum jam
+        LET sudut_jam = (INTEGER(jam) * 30) + (INTEGER(menit) / 2)
+        LET sudut_menit = INTEGER(menit) * 6
+        LET sudut_detik = INTEGER(detik) * 6
+        
+        CLEAR SCREEN
+        
+        -- Reset canvas
+        CALL gambar_lingkaran()
+        
+        -- Gambar jarum
+        CALL gambar_jarum(sudut_jam, "H")     -- Jarum jam
+        CALL gambar_jarum(sudut_menit, "M")   -- Jarum menit
+        CALL gambar_jarum(sudut_detik, "S")   -- Jarum detik
+        
+        -- Tampilkan canvas
+        CALL tampilkan_canvas()
+        
+        -- Tampilkan waktu
+        DISPLAY jam, ":", menit, ":", detik AT 20,40
+        
+        SLEEP 1
+    END WHILE
+END MAIN
