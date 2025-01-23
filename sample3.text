@@ -1,0 +1,93 @@
+MAIN
+DEFINE
+    jam, menit, detik SMALLINT,
+    sudut_jam, sudut_menit, sudut_detik FLOAT,
+    layar ARRAY[24,80] OF CHAR(1),
+    x, y SMALLINT
+
+FUNCTION draw_clock()
+    -- Membuat lingkaran jam
+    FOR x = 1 TO 24
+        FOR y = 1 TO 80
+            IF ((x-12)*(x-12) + (y-40)*(y-40) >= 441 AND 
+                (x-12)*(x-12) + (y-40)*(y-40) <= 484) THEN
+                LET layar[x,y] = '*'
+            END IF
+        END FOR
+    END FOR
+
+    -- Menggambar jarum jam
+    LET sudut_jam = (jam MOD 12 + menit/60.0) * 30
+    LET sudut_menit = menit * 6
+    LET sudut_detik = detik * 6
+
+    -- Jarum jam
+    CALL draw_line(12, 40, 
+        12 + 6 * sin(sudut_jam * 3.14159 / 180),
+        40 + 6 * cos(sudut_jam * 3.14159 / 180))
+
+    -- Jarum menit
+    CALL draw_line(12, 40, 
+        12 + 9 * sin(sudut_menit * 3.14159 / 180),
+        40 + 9 * cos(sudut_menit * 3.14159 / 180))
+
+    -- Jarum detik
+    CALL draw_line(12, 40, 
+        12 + 10 * sin(sudut_detik * 3.14159 / 180),
+        40 + 10 * cos(sudut_detik * 3.14159 / 180))
+END FUNCTION
+
+FUNCTION draw_line(x1, y1, x2, y2)
+    -- Implementasi DDA Line Drawing Algorithm
+    DEFINE 
+        dx, dy, steps, k FLOAT,
+        x, y FLOAT
+
+    LET dx = x2 - x1
+    LET dy = y2 - y1
+
+    IF abs(dx) > abs(dy) THEN
+        LET steps = abs(dx)
+    ELSE
+        LET steps = abs(dy)
+    END IF
+
+    LET x = x1
+    LET y = y1
+
+    FOR k = 1 TO steps
+        LET layar[int(x),int(y)] = '+'
+        LET x = x + (dx/steps)
+        LET y = y + (dy/steps)
+    END FOR
+END FUNCTION
+
+MAIN
+    DEFINE waktu DATETIME YEAR TO SECOND
+
+    WHILE TRUE
+        -- Mendapatkan waktu saat ini
+        LET waktu = CURRENT YEAR TO SECOND
+        LET jam = YEAR(waktu)
+        LET menit = MONTH(waktu)
+        LET detik = DAY(waktu)
+
+        -- Reset layar
+        INITIALIZE layar TO NULL
+
+        -- Gambar jam
+        CALL draw_clock()
+
+        -- Tampilkan layar
+        FOR x = 1 TO 24
+            FOR y = 1 TO 80
+                IF layar[x,y] IS NOT NULL THEN
+                    DISPLAY layar[x,y] AT LINE x, COLUMN y
+                END IF
+            END FOR
+        END FOR
+
+        -- Jeda sebelum refresh
+        SLEEP 1
+    END WHILE
+END MAIN
