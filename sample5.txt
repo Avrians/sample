@@ -1,0 +1,18 @@
+DEFINE arr_numbers ARRAY[15] OF INTEGER
+DEFINE i INTEGER
+
+FOR i = 1 TO 15
+    CASE i
+        WHEN 1 LET arr_numbers[i] = 3
+        WHEN 2,3 LET arr_numbers[i] = 4
+        WHEN 4 LET arr_numbers[i] = 5
+        WHEN 5,6 LET arr_numbers[i] = 6
+        WHEN 7 LET arr_numbers[i] = 7
+        WHEN 8,9 LET arr_numbers[i] = 8
+        WHEN 10 LET arr_numbers[i] = 9
+        WHEN 11,12 LET arr_numbers[i] = 10
+        WHEN 13 LET arr_numbers[i] = 11
+        WHEN 14,15 LET arr_numbers[i] = 12
+    END CASE
+END FOR
+

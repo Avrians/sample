@@ -1,0 +1,72 @@
+GLOBALS
+    DEFINE g_hour   SMALLINT,
+           g_minute SMALLINT,
+           g_second SMALLINT
+END GLOBALS
+
+MAIN
+    DEFINE i SMALLINT
+    DEFINE row, col SMALLINT
+    
+    WHILE TRUE
+        CALL CURRENT HOUR INTO g_hour
+        CALL CURRENT MINUTE INTO g_minute
+        CALL CURRENT SECOND INTO g_second
+        
+        -- Clear screen
+        CLEAR SCREEN
+        
+        -- Draw clock circle positions
+        FOR i = 1 TO 60
+            CALL get_position(i, row, col)
+            
+            -- Determine what character to display based on if it's an hour, minute, or second marker
+            IF i MOD 5 = 0 THEN
+                -- Hour markers
+                DISPLAY "$" AT row, col
+            ELSE
+                -- Regular minute markers
+                DISPLAY "." AT row, col
+            END IF
+        END FOR
+        
+        -- Display hour hand
+        CALL get_position((g_hour MOD 12) * 5 + (g_minute / 12), row, col)
+        DISPLAY "$" AT row, col
+        
+        -- Display minute hand
+        CALL get_position(g_minute, row, col)
+        DISPLAY "M" AT row, col
+        
+        -- Display second hand
+        CALL get_position(g_second, row, col)
+        DISPLAY "*" AT row, col
+        
+        -- Display center of clock
+        DISPLAY "+" AT 12, 40
+        
+        SLEEP 1
+    END WHILE
+END MAIN
+
+FUNCTION get_position(position, row, col)
+    DEFINE position SMALLINT,
+           row, col SMALLINT
+    
+    CASE position
+        WHEN 1 TO 15
+            LET row = 3 + (position - 1)
+            LET col = 40 + (position - 1)
+        WHEN 16 TO 30
+            LET row = 13
+            LET col = 54 - (position - 16)
+        WHEN 31 TO 45
+            LET row = 22 - (position - 31)
+            LET col = 39 - (position - 31)
+        WHEN 46 TO 60
+            LET row = 3
+            LET col = 25 + (position - 46)
+    END CASE
+    
+    RETURN row, col
+END FUNCTION

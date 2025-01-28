@@ -1,0 +1,71 @@
+MAIN
+  DEFINE i SMALLINT
+
+// Menit 1 - 15
+  DISPLAY ("*") AT 3,40
+  DISPLAY ("*") AT 4,41
+  DISPLAY ("*") AT 4,42
+  DISPLAY ("*") AT 5,43
+  DISPLAY ("*") AT 6,44
+  DISPLAY ("*") AT 6,45
+  DISPLAY ("*") AT 7,46
+  DISPLAY ("*") AT 8,47
+  DISPLAY ("*") AT 8,48
+  DISPLAY ("*") AT 9,49
+  DISPLAY ("*") AT 10,50
+  DISPLAY ("*") AT 10,51
+  DISPLAY ("*") AT 11,52
+  DISPLAY ("*") AT 12,53
+  DISPLAY ("*") AT 12,54
+
+// Menit 16 - 30
+  DISPLAY ("*") AT 13,54
+  DISPLAY ("*") AT 13,53
+  DISPLAY ("*") AT 14,52
+  DISPLAY ("*") AT 15,51
+  DISPLAY ("*") AT 15,50
+  DISPLAY ("*") AT 16,49
+  DISPLAY ("*") AT 17,48
+  DISPLAY ("*") AT 17,47
+  DISPLAY ("*") AT 18,46
+  DISPLAY ("*") AT 19,45
+  DISPLAY ("*") AT 19,44
+  DISPLAY ("*") AT 20,43
+  DISPLAY ("*") AT 21,42
+  DISPLAY ("*") AT 21,41
+  DISPLAY ("*") AT 22,40
+
+// Menit 31 - 45
+  DISPLAY ("*") AT 22,39
+  DISPLAY ("*") AT 21,38
+  DISPLAY ("*") AT 21,37
+  DISPLAY ("*") AT 20,36
+  DISPLAY ("*") AT 19,35
+  DISPLAY ("*") AT 19,34
+  DISPLAY ("*") AT 18,33
+  DISPLAY ("*") AT 17,32
+  DISPLAY ("*") AT 17,31
+  DISPLAY ("*") AT 16,30
+  DISPLAY ("*") AT 15,29
+  DISPLAY ("*") AT 15,28
+  DISPLAY ("*") AT 14,27
+  DISPLAY ("*") AT 13,26
+  DISPLAY ("*") AT 13,25
+
+// Menit 46 - 60
+  DISPLAY ("*") AT 12,25
+  DISPLAY ("*") AT 12,26
+  DISPLAY ("*") AT 11,27
+  DISPLAY ("*") AT 10,28
+  DISPLAY ("*") AT 10,29
+  DISPLAY ("*") AT 9,30
+  DISPLAY ("*") AT 8,31
+  DISPLAY ("*") AT 8,32
+  DISPLAY ("*") AT 7,33
+  DISPLAY ("*") AT 6,34
+  DISPLAY ("*") AT 6,35
+  DISPLAY ("*") AT 5,36
+  DISPLAY ("*") AT 4,37
+  DISPLAY ("*") AT 4,38
+  DISPLAY ("*") AT 3,39
+END MAIN
